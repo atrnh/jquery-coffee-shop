@@ -16,7 +16,9 @@
         <h1>Coffee Shop</h1>
         <br>
 
-        <img id="coffee_image" src="LOLWUT" alt="make this image work" height="300" width="200">
+        <img id="bean_image" src="static/coffee_beans.jpg" alt="make this image work" height="300" width="200">
+        <img id="machine_image" src="static/coffee_machine.jpg" alt="make this image work" height="300" width="200">
+        <img id="mug_image" src="static/coffee_mug.jpg" alt="make this image work" height="300" width="200">
 
         <h3 id="message">Click The Image To Order Coffee</h3>
 
@@ -47,14 +49,17 @@
 <script>
     "use strict";
 
-    var myImage = $("#coffee_image");
+    var beans = $("#bean_image");
+    var machine = $("#machine_image");
+    var mug = $("#mug_image");
     var myRevenueMessage = $("#revenue");
 
     var drinksOrdered = [];
 
-    myImage.attr("src", "static/coffee_beans.jpg");
+    machine.hide();
+    mug.hide();
 
-    myImage.on("click", function () { makeCoffee("brew"); });
+    beans.on("click", function () { makeCoffee("brew"); });
 
     function makeCoffee(drinkType) {
         drinksOrdered.push(drinkType);
@@ -63,9 +68,16 @@
         var myRevenue = revenue();
         myRevenueMessage.html("$" + myRevenue.toFixed(2));
 
-        myImage.attr("src", "static/coffee_machine.jpg");
-        setTimeout(function() { myImage.attr("src", "static/coffee_mug.jpg"); }, 1500);
-        setTimeout(function() { myImage.attr("src", "static/coffee_beans.jpg"); }, 4000);
+        beans.fadeOut(1500);
+        setTimeout(function () {
+            machine.fadeIn(3000, function() {
+                machine.hide();
+                mug.fadeIn(3000, function() {
+                   mug.hide();
+                   beans.fadeIn(3000); 
+                });
+            });
+        }, 1500);
     }
 
     var espresso = $("#espresso");
