@@ -17,8 +17,8 @@
         <br>
 
         <img id="bean_image" src="static/coffee_beans.jpg" alt="make this image work" height="300" width="200">
-        <img id="machine_image" src="static/coffee_machine.jpg" alt="make this image work" height="300" width="200">
-        <img id="mug_image" src="static/coffee_mug.jpg" alt="make this image work" height="300" width="200">
+       <!--  <img id="machine_image" src="static/coffee_machine.jpg" alt="make this image work" height="300" width="200">
+        <img id="mug_image" src="static/coffee_mug.jpg" alt="make this image work" height="300" width="200"> -->
 
         <h3 id="message">Click The Image To Order Coffee</h3>
 
@@ -49,44 +49,51 @@
 <script>
     "use strict";
 
-    var beans = $("#bean_image");
-    var machine = $("#machine_image");
-    var mug = $("#mug_image");
+    var myImage = $("#bean_image");
     var myRevenueMessage = $("#revenue");
+
+    var coffeeFinished = true;
 
     var drinksOrdered = [];
 
-    machine.hide();
-    mug.hide();
 
-    beans.on("click", function () { makeCoffee("brew"); });
+    myImage.on("click", function () { makeCoffee("brew"); });
 
     function makeCoffee(drinkType) {
-        drinksOrdered.push(drinkType);
-        console.log(drinksOrdered);
+        if (coffeeFinished) {
+            coffeeFinished = false;
 
-        var myRevenue = revenue();
-        myRevenueMessage.html("$" + myRevenue.toFixed(2));
+            console.log(drinkType, coffeeFinished);
+            drinksOrdered.push(drinkType);
+            console.log(drinksOrdered);
 
-        beans.fadeOut(1500);
-        setTimeout(function () {
-            machine.fadeIn(3000, function() {
-                machine.hide();
-                mug.fadeIn(3000, function() {
-                   mug.hide();
-                   beans.fadeIn(3000); 
+            var myRevenue = revenue();
+            myRevenueMessage.html("$" + myRevenue.toFixed(2));
+
+            myImage.fadeOut(1500, function() {
+                myImage.attr("src", "static/coffee_machine.jpg");
+                myImage.fadeIn(1500);
+                myImage.fadeOut(1500, function() {
+                    myImage.attr("src", "static/coffee_mug.jpg");
+                    myImage.fadeIn(1500);
+                    myImage.fadeOut(1500,function() {
+                        myImage.attr("src", "static/coffee_beans.jpg");
+                        myImage.fadeIn(1500, function() {
+                            coffeeFinished = true;
+                            console.log("coffee is finished!!");
+                        });
+                    });
                 });
             });
-        }, 1500);
+        } else {
+            alert("Please wait, your coffee isn't finished yet!");
+        }
+
     }
 
-    var espresso = $("#espresso");
-    var latte = $("#latte");
-    var hotChocolate = $("#hot-chocolate");
-
-    espresso.on('click', function () { makeCoffee("espresso"); });
-    latte.on('click', function () { makeCoffee("latte"); });
-    hotChocolate.on('click', function () { makeCoffee("hot chocolate"); });
+    $("#espresso").on('click', function () { makeCoffee("espresso"); });
+    $("#latte").on('click', function () { makeCoffee("latte"); });
+    $("#hot-chocolate").on('click', function () { makeCoffee("hot chocolate"); });
 
     // Use this dictionary to calculate profits for the day and log them to the console.
 
